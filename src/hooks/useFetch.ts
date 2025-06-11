@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import parseError from "../utils/parseError";
+
 function useFetch<T>(options: {
   options?: never;
   query: () => Promise<Response>;
@@ -32,11 +34,8 @@ function useFetch<T, U>({
 
         setData(responseData);
       } catch (err: unknown) {
-        setError(
-          err instanceof Error
-            ? err
-            : new Error("알 수 없는 오류가 발생했습니다."),
-        );
+        const errorMessage = parseError(err);
+        setError(new Error(errorMessage));
         setData(null);
       } finally {
         setIsLoading(false);
