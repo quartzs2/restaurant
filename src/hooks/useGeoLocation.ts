@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 
+interface GeolocationOptions {
+  enableHighAccuracy?: boolean;
+  maximumAge?: number;
+  timeout?: number;
+}
+
 interface Location {
   latitude: number;
   longitude: number;
 }
 
-export const useGeoLocation = (options = {}) => {
+export const useGeoLocation = (options: GeolocationOptions) => {
   const [location, setLocation] = useState<Location>();
   const [error, setError] = useState<Error | null>(null);
 

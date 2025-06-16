@@ -1,45 +1,27 @@
-import type { Place } from "./types/types";
+import { useMemo } from "react";
 
 import getAllPlaces from "./api/getAllPlaces";
-import CardContainer from "./components/CardContainer";
-import useFetch from "./hooks/useFetch";
+import getFavoritePlaces from "./api/getFavoritePlaces";
+import Section from "./components/Section";
 import { useGeoLocation } from "./hooks/useGeoLocation";
-import { sortPlacesByDistance } from "./utils/location";
 
 function App() {
-  const {
-    data,
-    error: fetchError,
-    isLoading,
-  } = useFetch<{ places: Place[] }>({
-    query: getAllPlaces,
-  });
-  const { error: geolocationError, location } = useGeoLocation();
-
-  const places: Place[] = data?.places ?? [];
-
-  let sortedPlaces: Place[];
-  if (location && places.length > 0) {
-    sortedPlaces = sortPlacesByDistance(
-      places,
-      location.latitude,
-      location.longitude,
-    );
-  } else {
-    sortedPlaces = places;
-  }
-
-  if (isLoading) {
-    return <div>로딩 중입니다.</div>;
-  }
-
-  if (fetchError || geolocationError) {
-    return <div>{(fetchError || geolocationError)?.message}</div>;
-  }
+  const memoizedOptions = useMemo(() => ({}), []);
+  const { error: geolocationError, location } = useGeoLocation(memoizedOptions);
 
   return (
     <>
-      <CardContainer places={sortedPlaces} />
+      {geolocationError && <div>{(geolocationError as Error).message}</div>}
+      <Section
+        fetchFunction={getFavoritePlaces}
+        location={location}
+        title="찜한 맛집"
+      />
+      <Section
+        fetchFunction={getAllPlaces}
+        location={location}
+        title="전체 맛집"
+      />
     </>
   );
 }
