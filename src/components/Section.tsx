@@ -1,26 +1,25 @@
 import type { Place } from "../types/types";
 
-import useFetch from "../hooks/useFetch";
 import { sortPlacesByDistance } from "../utils/location";
 import CardContainer from "./CardContainer";
 
 interface SectionProps {
-  fetchFunction: () => Promise<Response>;
+  data: null | { places: Place[] };
+  error: Error | null;
+  isLoading: boolean;
   location?: { latitude: number; longitude: number };
   onPlaceCardClick?: (place: Place) => void;
   title: string;
 }
 
 const Section = ({
-  fetchFunction,
+  data,
+  error,
+  isLoading,
   location,
   onPlaceCardClick,
   title,
 }: SectionProps) => {
-  const { data, error, isLoading } = useFetch<{ places: Place[] }>({
-    query: fetchFunction,
-  });
-
   const places: Place[] = data?.places ?? [];
 
   let sortedPlaces: Place[];
