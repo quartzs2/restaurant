@@ -5,10 +5,12 @@ import PlaceCard from "./PlaceCard";
 const CardContainer = ({
   error,
   isLoading,
+  onPlaceCardClick,
   places,
 }: {
   error: Error | null;
   isLoading: boolean;
+  onPlaceCardClick?: (place: Place) => void;
   places: Place[];
 }) => {
   if (isLoading) {
@@ -22,7 +24,7 @@ const CardContainer = ({
   return (
     <section className="flex max-w-fit flex-wrap gap-4">
       {places.map((place) => (
-        <PlaceCard key={place.id} {...place} />
+        <PlaceCard key={place.id} {...place} clickFunction={onPlaceCardClick} />
       ))}
     </section>
   );

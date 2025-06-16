@@ -7,10 +7,16 @@ import CardContainer from "./CardContainer";
 interface SectionProps {
   fetchFunction: () => Promise<Response>;
   location?: { latitude: number; longitude: number };
+  onPlaceCardClick?: (place: Place) => void;
   title: string;
 }
 
-const Section = ({ fetchFunction, location, title }: SectionProps) => {
+const Section = ({
+  fetchFunction,
+  location,
+  onPlaceCardClick,
+  title,
+}: SectionProps) => {
   const { data, error, isLoading } = useFetch<{ places: Place[] }>({
     query: fetchFunction,
   });
@@ -35,6 +41,7 @@ const Section = ({ fetchFunction, location, title }: SectionProps) => {
         <CardContainer
           error={error}
           isLoading={isLoading}
+          onPlaceCardClick={onPlaceCardClick}
           places={sortedPlaces}
         />
       ) : (

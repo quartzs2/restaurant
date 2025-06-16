@@ -5,7 +5,7 @@ import HttpError from "../errors/HttpError";
 
 const postFavoritePlace = async ({ placeData }: { placeData: Place }) => {
   const response = await fetch(`${DEFAULT_SERVER_URL}/users/places`, {
-    body: JSON.stringify(placeData),
+    body: JSON.stringify({ place: placeData }),
     headers: {
       "Content-Type": "application/json",
     },
